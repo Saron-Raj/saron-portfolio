@@ -36,7 +36,7 @@ const Skills: React.FC = () => {
   }, []);
 
   return (
-    <section id="skills" ref={sectionRef} className="min-h-screen flex flex-col pt-28 pb-16">
+    <section id="skills" ref={sectionRef} className="min-h-screen flex flex-col pt-[33px] pb-[33px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center">
         <div className="mb-12 text-center w-full">
           <h2 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Professional Skills</h2>

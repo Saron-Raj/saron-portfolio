@@ -11,38 +11,48 @@ const Header: React.FC = () => {
   const itemRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
 
+  // Combined Scroll Listener for Scroll State and Active Section Spy
   useEffect(() => {
     const handleScroll = () => {
+      // 1. Handle Header Background Styling
       setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  // Intersection Observer to track active section
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-50% 0px -50% 0px', // Trigger when section is in the middle of viewport
-      threshold: 0
-    };
+      // 2. Handle Active Section Spy
+      // Trigger point is slightly down the viewport (e.g. 180px) to account for header height
+      const spyLine = window.scrollY + 180; 
+      
+      // Calculate document height more robustly
+      const bodyHeight = document.documentElement.scrollHeight;
+      
+      // Special check for bottom of page to activate Contact if we are truly at the bottom
+      // Added window.scrollY > 100 to prevent this from firing at the top of the page
+      if (window.scrollY > 100 && (window.innerHeight + window.scrollY) >= bodyHeight - 20) {
+         setActiveSection(SECTIONS[SECTIONS.length - 1].id);
+         return;
+      }
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
+      for (const section of SECTIONS) {
+        const element = document.getElementById(section.id);
+        if (element) {
+          // Use getBoundingClientRect to get absolute position relative to viewport, then add scrollY
+          // This avoids issues where offsetTop is 0 because of parent containers (like SectionReveal)
+          const rect = element.getBoundingClientRect();
+          const elementTop = rect.top + window.scrollY;
+          const elementHeight = rect.height;
+
+          // Check if the spy line is within the bounds of this section
+          if (spyLine >= elementTop && spyLine < elementTop + elementHeight) {
+            setActiveSection(section.id);
+          }
         }
-      });
+      }
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    window.addEventListener('scroll', handleScroll);
+    // Initial check on mount
+    handleScroll();
     
-    SECTIONS.forEach((section) => {
-      const element = document.getElementById(section.id);
-      if (element) observer.observe(element);
-    });
-
-    return () => observer.disconnect();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Update Liquid Indicator Position
@@ -71,29 +81,65 @@ const Header: React.FC = () => {
       window.removeEventListener('resize', updateIndicator);
       clearTimeout(timeout);
     };
-  }, [activeSection]);
+  }, [activeSection, isMobileMenuOpen]); 
 
   const handleNavClick = (id: string) => {
     setIsMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Adjusted scroll position to account for fixed header
+      const headerOffset = 80;
+      // Get absolute position
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      
+      // Manually set active section immediately for snappiness
+      setActiveSection(id);
     }
   };
 
   const goHome = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveSection('home');
   };
 
   return (
     <header 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-3 border-b border-gray-100 dark:border-gray-800' 
-          : 'bg-transparent py-5'
+        isScrolled ? 'py-3' : 'py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      {/* 
+        Liquid Glass Background Container 
+        Visible only when scrolled. Replaces the simple bg-white/60 class.
+      */}
+      <div 
+        className={`absolute inset-0 -z-10 overflow-hidden transition-opacity duration-500 ${
+          isScrolled ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        {/* Base Glass Layer */}
+        <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-white/20"></div>
+        
+        {/* Animated Liquid Gradient Layer */}
+        <div 
+          className="absolute inset-0 opacity-40 mix-blend-overlay animate-liquid-glass"
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 25%, transparent 50%, rgba(255,255,255,0.4) 75%, transparent 100%)',
+            backgroundSize: '200% 100%'
+          }}
+        ></div>
+        
+        {/* Subtle Shine/Refraction Layer */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center relative z-10">
         {/* Logo */}
         <div 
           className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-400 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-all duration-300 hover:scale-105"
@@ -102,31 +148,46 @@ const Header: React.FC = () => {
           Saron Portfolio
         </div>
 
-        {/* Desktop Nav - Liquid Animation Style */}
+        {/* Desktop Nav - Liquid Glass "Dynamic Island" Style */}
         <nav 
           ref={navRef}
-          className="hidden md:flex items-center relative bg-gray-100/50 dark:bg-slate-800/50 p-1.5 rounded-full backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
+          className="hidden md:flex items-center relative bg-black/20 dark:bg-black/40 backdrop-blur-2xl p-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] ring-1 ring-white/10"
         >
-          {/* Moving Liquid Background Pill */}
+          {/* Moving Liquid Glass Pill */}
           <div
-            className="absolute top-1.5 bottom-1.5 rounded-full bg-white dark:bg-slate-700 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.1)] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+            className="absolute top-1.5 bottom-1.5 rounded-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.65,0,0.35,1)]"
             style={{
               left: `${indicatorStyle.left}px`,
               width: `${indicatorStyle.width}px`,
               opacity: indicatorStyle.opacity,
+              // Glass Styles
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              backdropFilter: 'blur(12px)',
+              boxShadow: `
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.4), 
+                inset 0 -1px 1px 0 rgba(255, 255, 255, 0.1),
+                0 4px 15px 0 rgba(0, 0, 0, 0.1)
+              `,
+              border: '1px solid rgba(255, 255, 255, 0.1)'
             }}
-          />
+          >
+            {/* Internal Flowing Light Animation */}
+            <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 animate-gloss-flow"></div>
+          </div>
 
           {SECTIONS.map((section) => (
             <button
               key={section.id}
               ref={(el) => { itemRefs.current[section.id] = el; }}
               onClick={() => handleNavClick(section.id)}
-              className={`relative z-10 px-5 py-2 text-sm font-semibold rounded-full transition-colors duration-300 ${
+              className={`relative z-10 px-6 py-2 text-sm font-bold rounded-full transition-all duration-700 hover:scale-105 ${
                 activeSection === section.id
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  ? 'text-white text-shadow-sm scale-105'
+                  : 'text-slate-400 dark:text-slate-300 hover:text-white'
               }`}
+              style={{
+                textShadow: activeSection === section.id ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
+              }}
             >
               {section.label}
             </button>
@@ -159,7 +220,7 @@ const Header: React.FC = () => {
             <button
               key={section.id}
               onClick={() => handleNavClick(section.id)}
-              className={`text-left font-medium text-lg py-3 px-4 rounded-xl transition-all duration-300 transform ${
+              className={`text-left font-bold text-lg py-3 px-4 rounded-xl transition-all duration-300 transform ${
                 activeSection === section.id
                 ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20 translate-x-2'
                 : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-blue-600 hover:translate-x-2'

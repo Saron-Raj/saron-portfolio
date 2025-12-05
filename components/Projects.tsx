@@ -50,7 +50,7 @@ const Projects: React.FC = () => {
   }, []);
 
   return (
-    <section id="projects" className="min-h-screen flex flex-col pt-28 pb-16">
+    <section id="projects" className="min-h-screen flex flex-col pt-[33px] pb-[33px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         <div className="mb-12 text-center">

@@ -26,7 +26,7 @@ const Resume: React.FC = () => {
   }, []);
 
   return (
-    <section id="experience" ref={sectionRef} className="min-h-screen flex flex-col pt-28 pb-16">
+    <section id="experience" ref={sectionRef} className="min-h-screen flex flex-col pt-[33px] pb-[33px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Experience</h2>
