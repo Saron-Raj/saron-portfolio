@@ -10,7 +10,7 @@ import { SectionReveal } from './components/SectionReveal';
 
 const App: React.FC = () => {
   return (
-    <div className={`min-h-screen relative pt-20 overflow-x-hidden`}>
+    <div className={`min-h-screen relative overflow-x-hidden`}>
       {/* Global Beautiful Background (Light Mode) */}
       <div className="fixed inset-0 -z-10 h-full w-full bg-white">
          <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>

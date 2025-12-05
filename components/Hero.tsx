@@ -50,13 +50,13 @@ const Hero: React.FC = () => {
   }, [text, isDeleting, loopNum, typingSpeed, toRotate]);
 
   return (
-    <section id="home" className="flex items-center justify-center relative overflow-hidden min-h-[calc(100vh-5rem)]">
+    <section id="home" className="flex items-center justify-center relative overflow-hidden min-h-screen pt-32 pb-16">
       {/* Background Decorative Blobs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
       <div className="absolute top-20 right-10 w-72 h-72 bg-yellow-300 dark:bg-yellow-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
       <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
-      <div className="w-full max-w-[95%] mx-auto px-4 flex flex-col items-center justify-center relative z-10 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center relative z-10 text-center w-full h-full">
         
         {/* Text Content - Centered */}
         <div className="w-full">

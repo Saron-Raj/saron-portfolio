@@ -50,10 +50,10 @@ const Projects: React.FC = () => {
   }, []);
 
   return (
-    <section id="projects" className="py-8 bg-transparent scroll-mt-24">
-      <div className="w-full max-w-[95%] mx-auto px-4">
+    <section id="projects" className="min-h-screen flex flex-col pt-28 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
-        <div className="mb-10 text-center">
+        <div className="mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Projects</h2>
           <div className="h-1 w-20 bg-blue-600 mx-auto rounded"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">

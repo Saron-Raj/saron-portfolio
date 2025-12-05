@@ -36,18 +36,18 @@ const Skills: React.FC = () => {
   }, []);
 
   return (
-    <section id="skills" ref={sectionRef} className="py-8 bg-transparent scroll-mt-24">
-      <div className="w-full max-w-[95%] mx-auto px-4 flex flex-col items-center">
-        <div className="mb-8 text-center w-full">
+    <section id="skills" ref={sectionRef} className="min-h-screen flex flex-col pt-28 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col items-center">
+        <div className="mb-12 text-center w-full">
           <h2 className="text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">Professional Skills</h2>
           <div className="h-1 w-20 bg-blue-600 mx-auto rounded"></div>
-          <p className="mt-2 text-gray-800 dark:text-gray-300">My technical and professional proficiency.</p>
+          <p className="mt-4 text-gray-800 dark:text-gray-300 max-w-2xl mx-auto">My technical and professional proficiency across development and administration.</p>
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-8 items-center justify-center">
           
           {/* Chart Container */}
-          <div className="w-full lg:w-2/3 h-[350px] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center">
+          <div className="w-full lg:w-2/3 h-[400px] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center">
             {startAnimation ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -60,8 +60,8 @@ const Skills: React.FC = () => {
                   <YAxis 
                     dataKey="name" 
                     type="category" 
-                    tick={{ fill: 'black', fontSize: 12, fontWeight: 500 }} 
-                    width={120}
+                    tick={{ fill: 'black', fontSize: 13, fontWeight: 500 }} 
+                    width={130}
                     stroke="black"
                     className="text-black"
                   />
@@ -73,7 +73,7 @@ const Skills: React.FC = () => {
                   <Bar 
                     dataKey="level" 
                     radius={[0, 4, 4, 0]} 
-                    barSize={20} 
+                    barSize={24} 
                     animationDuration={2000} // Smooth 2s animation
                     isAnimationActive={true}
                   >
@@ -91,13 +91,13 @@ const Skills: React.FC = () => {
           {/* Categories List */}
           <div className="w-full lg:w-1/3 grid grid-cols-1 gap-4">
              {categories.map((category) => (
-               <div key={category} className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-5 rounded-lg border border-gray-100 dark:border-gray-700 text-center shadow-sm flex flex-col items-center justify-center">
-                 <h3 className="font-bold text-lg text-black dark:text-white mb-3">{category}</h3>
-                 <div className="flex flex-wrap justify-center gap-2">
+               <div key={category} className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm p-6 rounded-lg border border-gray-100 dark:border-gray-700 text-center shadow-sm flex flex-col items-center justify-center">
+                 <h3 className="font-bold text-lg text-black dark:text-white mb-4">{category}</h3>
+                 <div className="flex flex-wrap justify-center gap-3">
                    {PORTFOLIO_DATA.skills
                      .filter(s => s.category === category)
                      .map(s => (
-                       <span key={s.name} className="text-xs font-medium px-3 py-1 rounded-full bg-blue-100 text-black border border-blue-200">
+                       <span key={s.name} className="text-sm font-medium px-4 py-2 rounded-full bg-blue-100 text-black border border-blue-200 hover:bg-blue-200 transition-colors cursor-default">
                          {s.name}
                        </span>
                      ))}
