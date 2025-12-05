@@ -47,13 +47,13 @@ const Skills: React.FC = () => {
         <div className="w-full flex flex-col lg:flex-row gap-8 items-center justify-center">
           
           {/* Chart Container */}
-          <div className="w-full lg:w-2/3 h-[400px] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-center">
+          <div className="w-full lg:w-2/3 h-[400px] bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-4 md:p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-start">
             {startAnimation ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={data}
                   layout="vertical"
-                  margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+                  margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#374151" opacity={0.2} />
                   <XAxis type="number" domain={[0, 100]} hide />

@@ -116,17 +116,17 @@ const Header: React.FC = () => {
     >
       {/* 
         Liquid Glass Background Container 
-        Visible only when scrolled. Replaces the simple bg-white/60 class.
+        Full-width, semi-transparent background with backdrop blur effect.
       */}
-      <div 
-        className={`absolute inset-0 -z-10 overflow-hidden transition-opacity duration-500 ${
-          isScrolled ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        {/* Base Glass Layer */}
-        <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-white/20"></div>
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        {/* Base Glass Layer with Semi-Transparency and Blur */}
+        <div className={`absolute inset-0 backdrop-blur-3xl border-b transition-all duration-500 ${
+          isScrolled 
+            ? 'bg-white/75 dark:bg-slate-900/75 border-white/20 shadow-sm' 
+            : 'bg-white/20 dark:bg-slate-900/20 border-white/5'
+        }`}></div>
         
-        {/* Animated Liquid Gradient Layer */}
+        {/* Animated Liquid Gradient Layer - Always active and visible */}
         <div 
           className="absolute inset-0 opacity-40 mix-blend-overlay animate-liquid-glass"
           style={{
